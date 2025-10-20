@@ -4,7 +4,7 @@ import {
   uploadPasses,
   getPass,
   viewPass,
-  viewPassByEmail,
+  //viewPassByEmail,
 } from "../controllers/passController.js";
 
 const router = express.Router();
@@ -15,7 +15,7 @@ router.get("/pass", getPass);
 
 router.get("/view-pass", viewPass);
 
-router.get("/view-pass2", viewPassByEmail);
+//router.get("/view-pass2", viewPassByEmail);
 
 export default router;
 
