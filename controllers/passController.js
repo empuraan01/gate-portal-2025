@@ -139,40 +139,40 @@ export const viewPass = (req, res) => {
     });
 };
 
-export const viewPassByEmail = (req, res) => {
-  const { email } = req.query;
+// export const viewPassByEmail = (req, res) => {
+//   const { email } = req.query;
 
-  if (!email) {
-    return res.status(400).send("Email is required");
-  }
+//   if (!email) {
+//     return res.status(400).send("Email is required");
+//   }
 
-  Pass.findOne({ email })
-    .then((pass) => {
-      if (!pass) {
-        return res.status(404).send("Pass not found for this user.");
-      }
+//   Pass.findOne({ email })
+//     .then((pass) => {
+//       if (!pass) {
+//         return res.status(404).send("Pass not found for this user.");
+//       }
 
-      bwipjs
-        .toBuffer({
-          bcid: "code128",
-          text: pass.id.toString(),
-          includetext: true,
-          textxalign: "center",
-        })
-        .then((barcodeBuffer) => {
-          res.json({
-            pass,
-            barcode: `data:image/png;base64,${barcodeBuffer.toString("base64")}`,
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(500).send("Server error generating barcode");
-        });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).send("Server error fetching pass");
-    });
-};
+//       bwipjs
+//         .toBuffer({
+//           bcid: "code128",
+//           text: pass.id.toString(),
+//           includetext: true,
+//           textxalign: "center",
+//         })
+//         .then((barcodeBuffer) => {
+//           res.json({
+//             pass,
+//             barcode: `data:image/png;base64,${barcodeBuffer.toString("base64")}`,
+//           });
+//         })
+//         .catch((err) => {
+//           console.log(err);
+//           res.status(500).send("Server error generating barcode");
+//         });
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       res.status(500).send("Server error fetching pass");
+//     });
+// };
 
