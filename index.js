@@ -8,8 +8,18 @@ import session from "express-session";
 import passport from "passport";
 import dotenv from "dotenv";
 import configurePassport from "./config/passport.js";
+
+// Routes
+import authRoutes from "./routes/auth.js";
+import passRoutes from "./routes/pass.js";
+import nightRoutes from "./routes/night.js";
+import staticRoutes from "./routes/static.js";
 import { connect } from "./config/db.js";
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const app = express();
 const port = process.env.PORT || 3000;
 // Database Connection
@@ -30,7 +40,14 @@ app.use(
   })
 );
 app.use(passport.initialize());
+app.use(passport.session());
+
+// Configure Passport
 configurePassport();
+
+// Routes
+app.use("/", staticRoutes);
+app.use("/", authRoutes);
 app.use("/", passRoutes);
 app.use("/", nightRoutes);
 
