@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Passes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f4f7fc;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .main {
+        background-color: white;
+        padding: 40px 60px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        width: 400px;
+        max-width: 100%;
+      }
+
+      .title {
+        font-size: 28px;
+        color: #4a90e2;
+        margin-bottom: 20px;
+        font-family: 'Open Sans', sans-serif;
+      }
+
+      .form {
+        margin-bottom: 20px;
+      }
+
+      input[type="file"], input[type="text"], input[type="email"], input[type="url"] {
+        padding: 10px;
+        width: 100%;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        outline: none;
+        transition: border 0.3s ease;
+      }
+
+      input[type="file"]:focus, input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus {
+        border-color: #4a90e2;
+      }
+
+      button {
+        padding: 12px 30px;
+        font-size: 16px;
+        background-color: #4a90e2;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #357ab7;
+      }
+
+      /* Collapsible section style */
+      .collapsible-content {
+        display: none;
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #f1f1f1;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .collapsible-button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #4a90e2;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+        transition: background-color 0.3s ease;
+      }
+
+      .collapsible-button:hover {
+        background-color: #357ab7;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <h1 class="title">Upload Passes</h1>
+
+      <!-- File Upload Form -->
+      <form id="batch-upload-form" class="form" enctype="multipart/form-data">
+        <h3>Upload a Batch of Passes</h3>
+        <input type="file" name="file" id="file-input" required />
+        <button type="submit">Upload</button>
+      </form>
+
+      <hr />
+
+      <!-- Button to toggle the collapsible individual pass form -->
+      <button class="collapsible-button" onclick="toggleCollapsibleForm()">Add Individual Pass</button>
+
+      <!-- Collapsible Content (Individual Pass Form) -->
+      <div id="individual-pass-form" class="collapsible-content">
+        <form action="/passes" method="post" class="form" id="individual-pass-form-submit">
+          <input type="text" name="name" placeholder="Name" required />
+          <input type="text" name="college" placeholder="College" required />
+          <input type="email" name="email" placeholder="Email" required />
+          <input type="text" name="type" placeholder="Type" required />
+          <input type="url" name="photo" placeholder="Photo URL" required />
+          <button type="submit">Add Pass</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const toggleCollapsibleForm = () => {
+        const content = document.getElementById("individual-pass-form");
+        const button = document.querySelector(".collapsible-button");
+
+        if (content.style.display === "none" || content.style.display === "") {
+          content.style.display = "block";
+          button.innerText = "Hide Individual Pass Form";
+        } else {
+          content.style.display = "none";
+          button.innerText = "Add Individual Pass";
+        }
+      };
+
+      document.getElementById('batch-upload-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData();
+        const fileInput = document.getElementById('file-input');
+        formData.append('file', fileInput.files[0]);
+
+        try {
+          const response = await fetch('/passes', {
+            method: 'POST',
+            body: formData,
+          });
+          const data = await response.json();
+          alert(`Passes uploaded successfully! ${data.message}`);
+          fileInput.value = '';
+        } catch (error) {
+          alert(`Error uploading passes: ${error.message}`);
+          fileInput.value = '';
+        }
+      });
+
+      document.getElementById('individual-pass-form-submit').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const passData = {
+          name: formData.get('name'),
+          college: formData.get('college'),
+          email: formData.get('email'),
+          type: formData.get('type'),
+          photo: formData.get('photo'),
+        };
+
+        try {
+          const response = await fetch('/passes', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(passData),
+          });
+          const data = await response.json();
+          alert(`Individual pass added successfully! ${data.message}`);
+          document.getElementById('individual-pass-form-submit').reset();
+        } catch (error) {
+          alert(`Error adding individual pass: ${error.message}`);
+        }
+      });
+    </script>
+  </body>
+</html>

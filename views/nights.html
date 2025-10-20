@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+        background-color: white;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .main {
+        background-color: white;
+        padding: 40px 60px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        width: 400px;
+      }
+
+      .title {
+        font-size: 28px;
+        color: #4a90e2;
+        margin-bottom: 20px;
+        font-family: 'Open Sans', sans-serif;
+      }
+
+      .form {
+        margin-bottom: 20px;
+      }
+
+      label {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 8px;
+        display: block;
+      }
+
+      input[type="text"] {
+        padding: 10px;
+        width: 100%;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        outline: none;
+        transition: border 0.3s ease;
+      }
+
+      input[type="text"]:focus {
+        border-color: #4a90e2;
+      }
+
+      button {
+        padding: 12px 30px;
+        font-size: 16px;
+        background-color: #4a90e2;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #357ab7;
+      }
+
+      .status {
+        font-size: 18px;
+        color: #777;
+        margin-top: 20px;
+      }
+
+      .green {
+        color: #28a745;
+      }
+
+      .red {
+        color: #e74c3c;
+      }
+
+      .scanned-id {
+        font-size: 18px;
+        color: #333;
+        margin-top: 20px;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <h1 class="title">Nights Portal</h1>
+      <form class="form">
+        <label for="id">Enter BITS ID or Scan Barcode</label>
+        <input type="text" placeholder="BITS ID or Barcode" id="id" />
+        <button type="submit">Submit</button>
+      </form>
+
+      <!-- Display Scanned ID -->
+      <div id="scanned-id" class="scanned-id"></div>
+
+      <h2 class="status">Status:</h2>
+    </div>
+    
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const nn = urlParams.get("q");
+      const status = document.querySelector(".status");
+      const scannedIdDisplay = document.querySelector("#scanned-id");
+      const form = document.querySelector(".form");
+      const idInput = document.querySelector("#id");
+
+      // Validate night number
+      if (!["1", "2", "3", "4"].includes(nn)) {
+        window.location.href = "/";
+      }
+
+      // Set page title based on night
+      const titleElement = document.querySelector(".title");
+      titleElement.innerText = nn === "4" ? "Comedy Nights Portal" : `Nights Day ${nn} Portal`;
+
+      // Handle form submission
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const scannedId = idInput.value;
+        const data = { id: scannedId };
+
+        scannedIdDisplay.innerHTML = `Scanned ID: <strong>${scannedId}</strong>`;
+
+        try {
+          const response = await fetch(`/nights?q=${nn}`, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+              "Content-Type": "application/json; charset=UTF-8",
+            },
+          });
+
+          if (response.status === 200) {
+            status.innerHTML = 'Status: <span class="green">Success</span>';
+          } else {
+            const errorMessage = await response.text();
+            status.innerHTML = `Status: <span class="red">Failed</span>. ${errorMessage}`;
+          }
+        } catch (error) {
+          status.innerHTML = `Status: <span class="red">Failed</span>. ${error.message}`;
+        } finally {
+          idInput.value = "";
+        }
+      });
+    </script>
+  </body>
+</html>
