@@ -92,7 +92,7 @@ export const getPass = async (req, res) => {
   try {
     const { email } = req.query;
     const pass = await Pass.findOne({ email });
-    if (!pass || pass.college === "BITSG") {
+    if (!pass) {
       return res.status(404).json("User not found");
     }
     res.json(pass);
