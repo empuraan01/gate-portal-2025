@@ -126,7 +126,7 @@
         const resultDiv = document.getElementById("result");
 
         try {
-          const response = await fetch(`/view-pass2?email=${email}`);
+          const response = await fetch(`/view-pass?email=${email}`);
           if (response.status === 200) {
             const pass = await response.json();
             const fileIdMatch = /(?:\?id=|\/d\/)([^\/?&]+)/.exec(pass.pass.photo);

@@ -3,8 +3,8 @@ import upload from "../config/multer.js";
 import {
   uploadPasses,
   getPass,
-  viewPass,
-  //viewPassByEmail,
+  //viewPass,
+  viewPassByEmail,
 } from "../controllers/passController.js";
 
 const router = express.Router();
@@ -13,9 +13,9 @@ router.post("/passes", upload.single("file"), uploadPasses);
 
 router.get("/pass", getPass);
 
-router.get("/view-pass", viewPass);
+//router.get("/view-pass", viewPass);
 
-//router.get("/view-pass2", viewPassByEmail);
+router.get("/view-pass", viewPassByEmail);
 
 export default router;
 
