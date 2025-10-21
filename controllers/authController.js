@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export const googleAuthRedirect = (req, res) => {
-  res.redirect("/qpass");
+  res.redirect("/");
 };
 
 export const getUploadPassesPage = (req, res) => {
