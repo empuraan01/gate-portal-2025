@@ -3,7 +3,9 @@ import mongoose from "mongoose";
 const NightSchema = mongoose.Schema(
   {
     id: String,
+    name: String,
     college: String,
+    bitsID: String,
   },
   {
     timestamps: true,

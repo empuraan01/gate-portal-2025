@@ -18,6 +18,11 @@ const passSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    bitsID : {
+        type : String,
+        default : "default",
+        trim : true,
+    },
     email: {
       type: String,
       required: true,

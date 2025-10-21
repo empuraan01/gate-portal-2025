@@ -36,7 +36,9 @@ export const registerNight = async (req, res) => {
     }
     const night = new Night({
       id,
+      name: pass.name,
       college: pass.college,
+      bitsID: pass.bitsID,
     });
 
     await night.save();
