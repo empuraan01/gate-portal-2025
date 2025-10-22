@@ -34,6 +34,7 @@ export const uploadPasses = async (req, res) => {
         email: pass.email,
         type: pass.type,
         photo: pass.photo,
+        ...(pass.bitsID && { bitsID: pass.bitsID }), 
         uploadedBy: req.user.emails[0].value,
       }));
 
