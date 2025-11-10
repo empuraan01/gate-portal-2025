@@ -1,5 +1,5 @@
 import xlsx from "xlsx";
-import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid";
 import bwipjs from "bwip-js";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -28,7 +28,7 @@ export const uploadPasses = async (req, res) => {
       const data = xlsx.utils.sheet_to_json(ws);
 
       const passes = data.map((pass) => ({
-        id: uuidv4(),
+        id: nanoid(12),
         name: pass.name,
         college: pass.college,
         email: pass.email,
@@ -66,7 +66,7 @@ export const uploadPasses = async (req, res) => {
 
     try {
       const pass = {
-        id: uuidv4(),
+        id: nanoid(12),
         name,
         college,
         email,
