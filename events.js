@@ -10,6 +10,7 @@ export const passTypeToEvents = {
   D13 : ["1", "3","4"],
   D23 : ["2", "3"],
   E : [],
+  AE : [],
   FACULTY: ["1", "2", "3", "4"],
   PHD : ["1", "2", "3", "4"],
   SR : ["1"]
